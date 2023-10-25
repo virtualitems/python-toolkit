@@ -7,12 +7,7 @@ Python runners usage
 # standard
 from __future__ import annotations
 from typing import TYPE_CHECKING
-
 import asyncio
-
-# typing
-if TYPE_CHECKING:  # pragma: no cover
-    pass
 
 
 async def async_print_message(message: str, delay: int):
