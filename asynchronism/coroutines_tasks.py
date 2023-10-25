@@ -5,6 +5,7 @@ Python coroutines and tasks usage
 """
 
 # standard
+from datetime import datetime
 import asyncio
 
 
@@ -65,3 +66,29 @@ async def basic_tasks():
 
 # Iniciar ejecución asincrona
 asyncio.run(basic_tasks())
+
+
+# ----------------------------------------
+# Tasks group
+# ----------------------------------------
+
+async def obtener_hora_actual():
+    return datetime.now()
+
+
+async def tasks_group():
+    print('Ejecutando grupo de tareas... ', end='')
+
+    # Contexto con grupo de tareas
+    async with asyncio.TaskGroup() as tg:
+
+        # Crear tareas
+        task1 = tg.create_task(obtener_hora_actual())
+        task2 = tg.create_task(obtener_hora_actual())
+
+    # Al finalizar el contexto de ejecución
+    print(f'Resultados: {task1.result()}, {task2.result()}')
+
+
+# Iniciar ejecución asincrona
+asyncio.run(tasks_group())
