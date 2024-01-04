@@ -26,8 +26,7 @@ from datetime import datetime, timedelta
 def datetime_range(start_datetime, end_datetime, step = None):
     """ Generator for a datetime range """
 
-    # VALIDATIONS
-
+    # validations
     assert isinstance(start_datetime, datetime), 'start must be a datetime'
     assert isinstance(end_datetime, datetime), 'end must be a datetime'
     assert step is None or isinstance(step, timedelta), 'step must be None or a timedelta'
@@ -43,6 +42,7 @@ def datetime_range(start_datetime, end_datetime, step = None):
         elif step_seconds < 0:
             assert start_datetime >= end_datetime, 'start must be greater than end with negative step'
 
+    # generator
     _start_datetime = start_datetime
     _end_datetime = end_datetime
     _step = timedelta(seconds=1) if step is None else step
