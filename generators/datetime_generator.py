@@ -30,6 +30,7 @@ def datetime_range(start_datetime, end_datetime, step = None):
 
     assert isinstance(start_datetime, datetime), 'start must be a datetime'
     assert isinstance(end_datetime, datetime), 'end must be a datetime'
+    assert step is None or isinstance(step, timedelta), 'step must be None or a timedelta'
 
     if isinstance(step, timedelta):
         step_seconds = step.total_seconds()
