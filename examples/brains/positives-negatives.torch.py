@@ -18,7 +18,7 @@ class SignClassifier(nn.Module):
         # Capa de salida: 3 neuronas (una por cada clase: negativo, cero, positivo)
         self.layer1 = nn.Linear(1, 8)
         self.layer2 = nn.Linear(8, 3)
-        self.activation = nn.Tanh()  # Función de activación
+        self.activation = nn.ReLU()  # Función de activación
 
     def forward(self, x):
         current = x
@@ -48,23 +48,28 @@ def class_to_result(class_idx):
 
 
 # Crear datos de entrenamiento que la red utilizará para aprender
-def create_training_data(n_samples=1000):
+def create_training_data(n_samples):
     # Generar números aleatorios entre -100 y 100 (distribución normal escalada)
     numbers = torch.randn(n_samples, 1) * 100
+
     # Agregar algunos ceros explícitamente para que la red los vea con frecuencia
     numbers[0:10] = 0
 
+    # Agregar algunos decimales cercanos a cero
+    numbers[10:110] = torch.randn(100, 1) * 1
+
     # Crear etiquetas transformando cada número a su clase
     labels = torch.tensor([label_to_class(n.item()) for n in numbers])
+
     return numbers, labels
 
 
 # Entrenar el modelo para que aprenda de los datos
-def train_model(model, epochs=500):
+def train_model(model, epochs):
     criterion = nn.CrossEntropyLoss()  # Función de pérdida para clasificación multiclase
     optimizer = optim.Adam(model.parameters(), lr=0.01)  # Algoritmo que ajusta los pesos
 
-    X_train, y_train = create_training_data()  # Obtenemos datos y etiquetas
+    X_train, y_train = create_training_data(1000)  # Obtenemos datos y etiquetas
 
     print("Entrenando la red neuronal...")
     for epoch in range(epochs):
