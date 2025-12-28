@@ -107,7 +107,7 @@ if __name__ == "__main__":
     modelo = SignClassifier()
 
     # Entrenar el modelo con los datos generados
-    train_model(modelo, epochs=1000)
+    train_model(modelo, epochs=2000)
 
     # Probar con algunos números manuales para ver cómo responde
     print("\n--- Pruebas ---")
