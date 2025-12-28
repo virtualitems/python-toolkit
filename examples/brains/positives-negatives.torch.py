@@ -18,12 +18,12 @@ class SignClassifier(nn.Module):
         # Capa de salida: 3 neuronas (una por cada clase: negativo, cero, positivo)
         self.layer1 = nn.Linear(1, 8)
         self.layer2 = nn.Linear(8, 3)
-        self.activation = nn.ReLU()  # Función de activación
+        self.activate = nn.ReLU()  # Función de activación
 
     def forward(self, x):
         current = x
         # Pasamos la entrada por la primera capa y aplicamos la función de activación
-        current = self.activation(self.layer1(current))
+        current = self.activate(self.layer1(current))
         # La segunda capa produce los logits de las 3 clases
         current = self.layer2(current)
         return current  # No usamos softmax porque CrossEntropyLoss lo aplica internamente
@@ -32,12 +32,13 @@ class SignClassifier(nn.Module):
 # Función para convertir etiqueta numérica a clase entera comprensible por la red
 def label_to_class(num):
     """Convierte un número a su clase: 0=negativo, 1=cero, 2=positivo"""
+    if num == 0 or num == -0:
+        return 1  # cero
+
     if num < 0:
         return 0  # negativo
-    elif num == 0:
-        return 1  # cero
-    else:
-        return 2  # positivo
+
+    return 2  # positivo
 
 
 # Función para convertir predicción de la red (clase) a resultado final (-1, 0, 1)
@@ -52,11 +53,13 @@ def create_training_data(n_samples):
     # Generar números aleatorios entre -100 y 100 (distribución normal escalada)
     numbers = torch.randn(n_samples, 1) * 100
 
-    # Agregar algunos ceros explícitamente para que la red los vea con frecuencia
-    numbers[0:10] = 0
-
     # Agregar algunos decimales cercanos a cero
-    numbers[10:110] = torch.randn(100, 1) * 1
+    numbers[0:100] = torch.randn(100, 1) * 1
+
+    # Agregar algunos ceros explícitamente para que la red los vea con frecuencia
+    numbers[100:110] = 0
+    numbers[110:120] = -0
+
 
     # Crear etiquetas transformando cada número a su clase
     labels = torch.tensor([label_to_class(n.item()) for n in numbers])
